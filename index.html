@@ -2,156 +2,259 @@
 <html lang="en">
 
 <head>
- 
-    <title>To Do List</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium To Do List</title>
 
-        body {
-            height: 100vh;
-            background: #f2f2f2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
 
-        .todo-container {
-            width:70vw;
-            min-height: 400px;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 80px;
-            box-shadow: gray;
-        }
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, #38bdf8, transparent 35%),
+        radial-gradient(circle at bottom right, #f59e0b, transparent 35%),
+        linear-gradient(135deg, #020617, #111827);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: white;
+    }
 
-        .todo-container h2 {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+    .todo-container {
+      width: 430px;
+      max-width: 100%;
+      padding: 26px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+    }
 
-        .input-box {
-            display: flex;
-            gap: 5px;
-        }
+    .todo-container h2 {
+      text-align: center;
+      margin-bottom: 22px;
+      font-size: 32px;
+      font-weight: 900;
+    }
 
-        .input-box input {
-            flex: 1;
-            padding: 8px;
-            outline: none;
-        }
+    .input-box {
+      display: flex;
+      gap: 10px;
+      padding: 7px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.14);
+    }
 
-        .input-box button {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
+    .input-box input {
+      flex: 1;
+      padding: 13px 16px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: white;
+      font-size: 15px;
+    }
 
-        ul {
-            list-style: none;
-            margin-top: 15px;
-        }
+    .input-box input::placeholder {
+      color: #cbd5e1;
+    }
 
-        li {
-            background: #eee;
-            padding: 8px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-             background-color: gold;
-            border-radius: 10px;
-            color:white;
-        }
+    #btn {
+      padding: 12px 20px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      font-weight: 700;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      box-shadow: 0 12px 25px rgba(245, 158, 11, 0.35);
+      transition: 0.3s;
+    }
 
-        li.done {
-            text-decoration: line-through;
-            color: gray;
-        }
+    #btn:hover {
+      transform: scale(1.05);
+    }
 
-        li button {
-            background: red;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            padding: 4px 8px;
-            cursor: pointer;
-        }
-        #btn {
-        background-color: gold;
-        border-radius: 10px;
-        outline: none;
-        border: none;
-        }
-        .list-container{
-             margin-top: 20px;
-             list-style: none;
-        }
-     
-    </style>
+    #list-container {
+      list-style: none;
+      margin-top: 22px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    #list-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #list-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+    }
+
+    li {
+      min-height: 52px;
+      padding: 12px 12px 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    li span {
+      flex: 1;
+      cursor: pointer;
+      word-break: break-word;
+    }
+
+    li.done span {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    .deletebtn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      color: white;
+      background: #ef4444;
+      transition: 0.3s;
+    }
+
+    .deletebtn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+
+    .toast {
+      position: fixed;
+      top: 22px;
+      right: 22px;
+      padding: 13px 18px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      color: white;
+      transform: translateX(150%);
+      transition: 0.4s;
+      z-index: 999;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .todo-container {
+        padding: 22px;
+      }
+
+      .todo-container h2 {
+        font-size: 28px;
+      }
+
+      #btn {
+        padding: 12px 16px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="todo-container">
-        <h2>To Do List</h2>
+  <div class="toast" id="toast">Message</div>
 
-        <div class="input-box">
-            <input type="text" id="taskInput" placeholder="Enter task">
-            <button id="btn">Add</button>
-        </div>
+  <div class="todo-container">
+    <h2>To Do List</h2>
 
-        <ul id="list-container">
-         <!-- <li>item 1</li> -->
-        </ul>
+    <div class="input-box">
+      <input type="text" id="taskInput" placeholder="Enter your task...">
+      <button id="btn">Add</button>
     </div>
 
-    
+    <ul id="list-container"></ul>
+  </div>
+
+  <script>
+    const inp = document.querySelector("#taskInput");
+    const btn = document.querySelector("#btn");
+    const list = document.querySelector("#list-container");
+    const toast = document.querySelector("#toast");
+
+    function showToast(message) {
+      toast.innerText = message;
+      toast.classList.add("show");
+
+      setTimeout(function () {
+        toast.classList.remove("show");
+      }, 1500);
+    }
+
+    function addToDo() {
+      const value = inp.value.trim();
+
+      if (value === "") {
+        showToast("Please enter a task");
+        return;
+      }
+
+      const li = document.createElement("li");
+
+      li.innerHTML = `
+        <span>${value}</span>
+        <button class="deletebtn">Delete</button>
+      `;
+
+      li.querySelector("span").addEventListener("click", function () {
+        li.classList.toggle("done");
+      });
+
+      li.querySelector(".deletebtn").addEventListener("click", function () {
+        li.remove();
+        showToast("Task deleted");
+      });
+
+      list.appendChild(li);
+      inp.value = "";
+      showToast("Task added");
+    }
+
+    btn.addEventListener("click", addToDo);
+
+    inp.addEventListener("keyup", function (e) {
+      if (e.key === "Enter") {
+        addToDo();
+      }
+    });
+  </script>
+
 </body>
-<script>
-       var inp = document.querySelector(".input-box input");
-       var btn = document.querySelector("#btn");
-       var list = document.querySelector("#list-container");
-
-       function addToDo(){
-         var value = inp.value.trim();
-         if (value == "") {
-             alert ("Empty Input");
-             return;
-         }
-
-
-         var li = document.createElement("li");
-        li.innerHTML = `${value} <button class = "deletebtn"> Delete </button>`;
-
-        li.querySelector(".deletebtn").addEventListener(
-            "click",
-            function(e){
-                li.remove();
-            }
-        )
-
-        list.appendChild(li)
-        inp.value = ""
-        console.log (list.childElementCount,"childElementCount")
-       }
-        btn.addEventListener("click", addToDo);
-
-       inp.addEventListener(
-       "keyup",
-       function(e){
-        if (e.key == "Enter"){
-            addToDo();
-        }
-       }
-
-       )
-
-  
-</script>
 </html>
